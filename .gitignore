@@ -1,0 +1,31 @@
+# Build and intermediate compiler folders
+**/build/
+**/.dart_tool/
+**/.gradle/
+**/app-release.apk
+
+# Package managers
+**/node_modules/
+**/vendor/
+
+# Local configuration & environment secrets
+**/.env
+**/.env.local
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
+
+# IDE, OS and Logs
+.vscode/
+.idea/
+*.iml
+*.log
+*.err
+.DS_Store
+Thumbs.db
+
+# Google/Firebase Private Credentials
+**/firebase-service-account.json
+**/google-services.json
+**/storage/framework/views/*
+
