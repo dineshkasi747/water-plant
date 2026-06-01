@@ -7,8 +7,8 @@ import '../models/customer.dart';
 import '../models/transaction.dart';
 
 class ApiService extends ChangeNotifier {
-  // Base URL: configured for local Wi-Fi connection
-  String _baseUrl = 'http://192.168.0.147:5000/api';
+  // Base URL: configured for production Render server
+  String _baseUrl = 'https://water-plant-dlac.onrender.com/api';
   
   String? _token;
   User? _currentUser;

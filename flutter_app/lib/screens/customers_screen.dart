@@ -190,11 +190,11 @@ class _CustomersScreenState extends State<CustomersScreen> {
                   
                   _buildInputField(_nameController, 'Customer Name', Icons.person_outline_rounded),
                   const SizedBox(height: 16),
-                  _buildInputField(_phoneController, 'Phone Number', Icons.phone_android_rounded, keyboardType: TextInputType.phone),
+                  _buildInputField(_phoneController, 'Phone Number (Optional)', Icons.phone_android_rounded, keyboardType: TextInputType.phone, isRequired: false),
                   const SizedBox(height: 16),
-                  _buildInputField(_areaController, 'Delivery Area (e.g. Doctor Colony)', Icons.location_on_outlined),
+                  _buildInputField(_areaController, 'Delivery Area (Optional, e.g. Doctor Colony)', Icons.location_on_outlined, isRequired: false),
                   const SizedBox(height: 16),
-                  _buildInputField(_addressController, 'Full Address', Icons.home_work_outlined, maxLines: 2),
+                  _buildInputField(_addressController, 'Full Address (Optional)', Icons.home_work_outlined, maxLines: 2, isRequired: false),
                   const SizedBox(height: 24),
 
                   ElevatedButton(
@@ -225,7 +225,8 @@ class _CustomersScreenState extends State<CustomersScreen> {
     String label, 
     IconData icon, {
     TextInputType keyboardType = TextInputType.text,
-    int maxLines = 1
+    int maxLines = 1,
+    bool isRequired = true,
   }) {
     return TextFormField(
       controller: controller,
@@ -251,7 +252,9 @@ class _CustomersScreenState extends State<CustomersScreen> {
           borderSide: const BorderSide(color: Color(0xFF06B6D4), width: 2),
         ),
       ),
-      validator: (value) => value == null || value.trim().isEmpty ? 'Required field' : null,
+      validator: isRequired 
+          ? (value) => value == null || value.trim().isEmpty ? 'Required field' : null
+          : null,
     );
   }
 

@@ -36,16 +36,16 @@ router.get('/', auth, async (req, res) => {
 router.post('/', auth, async (req, res) => {
   const { name, phone, address, area } = req.body;
 
-  if (!name || !phone || !address || !area) {
-    return res.status(400).json({ message: 'Please enter name, phone, address and area' });
+  if (!name) {
+    return res.status(400).json({ message: 'Please enter customer name' });
   }
 
   try {
     const newCustomer = new Customer({
       name,
-      phone,
-      address,
-      area,
+      phone: phone || '',
+      address: address || '',
+      area: area || 'General',
       cansOut: 0
     });
 

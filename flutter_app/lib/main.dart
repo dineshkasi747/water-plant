@@ -136,7 +136,7 @@ class _AquaFlowAppState extends State<AquaFlowApp> {
       ),
 
       // Set initial loading state screen or route
-      home: apiService.isAuthenticated ? const CustomersScreen() : const LoginScreen(),
+      home: const SplashGate(),
       
       // Application Routing
       routes: {
@@ -155,6 +155,44 @@ class _AquaFlowAppState extends State<AquaFlowApp> {
         }
         return null;
       },
+    );
+  }
+}
+
+class SplashGate extends StatefulWidget {
+  const SplashGate({super.key});
+
+  @override
+  State<SplashGate> createState() => _SplashGateState();
+}
+
+class _SplashGateState extends State<SplashGate> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _checkAuth());
+  }
+
+  Future<void> _checkAuth() async {
+    final apiService = Provider.of<ApiService>(context, listen: false);
+    // Give SharedPreferences a brief moment to load the cached token
+    await Future.delayed(const Duration(milliseconds: 300));
+    if (mounted) {
+      if (apiService.isAuthenticated) {
+        Navigator.pushReplacementNamed(context, '/customers');
+      } else {
+        Navigator.pushReplacementNamed(context, '/login');
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      backgroundColor: Color(0xFF0F172A),
+      body: Center(
+        child: CircularProgressIndicator(color: Color(0xFF06B6D4)),
+      ),
     );
   }
 }

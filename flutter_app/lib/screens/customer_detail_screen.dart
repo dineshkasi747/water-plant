@@ -110,6 +110,17 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
       return;
     }
 
+    // Safety check: Cannot return more empty cans than they have outstanding!
+    if (type == 'returned' && qty > _customer.cansOut) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('⚠️ Customer only has ${_customer.cansOut} outstanding cans! Cannot return $qty.'),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+      return;
+    }
+
     Navigator.pop(context); // Dismiss dialog
     setState(() {
       _isLoading = true;
@@ -165,6 +176,17 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
   void _showTransactionDialog(String type) {
     _qtyController.text = '1'; // Default
     final isGive = type == 'gave';
+    
+    // Safety check: Cannot return empty cans if outstanding is 0!
+    if (!isGive && _customer.cansOut == 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('⚠️ Customer has 0 outstanding cans! Cannot return empty cans.'),
+          backgroundColor: Colors.amber,
+        ),
+      );
+      return;
+    }
     
     showDialog(
       context: context,
@@ -276,11 +298,11 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                   
                   _buildInputField(nameCtrl, 'Customer Name', Icons.person_outline_rounded),
                   const SizedBox(height: 16),
-                  _buildInputField(phoneCtrl, 'Phone Number', Icons.phone_android_rounded, keyboardType: TextInputType.phone),
+                  _buildInputField(phoneCtrl, 'Phone Number (Optional)', Icons.phone_android_rounded, keyboardType: TextInputType.phone, isRequired: false),
                   const SizedBox(height: 16),
-                  _buildInputField(areaCtrl, 'Delivery Area (e.g. Doctor Colony)', Icons.location_on_outlined),
+                  _buildInputField(areaCtrl, 'Delivery Area (Optional, e.g. Doctor Colony)', Icons.location_on_outlined, isRequired: false),
                   const SizedBox(height: 16),
-                  _buildInputField(addressCtrl, 'Full Address', Icons.home_work_outlined, maxLines: 2),
+                  _buildInputField(addressCtrl, 'Full Address (Optional)', Icons.home_work_outlined, maxLines: 2, isRequired: false),
                   const SizedBox(height: 24),
 
                   ElevatedButton(
@@ -355,7 +377,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
     String label, 
     IconData icon, {
     TextInputType keyboardType = TextInputType.text,
-    int maxLines = 1
+    int maxLines = 1,
+    bool isRequired = true,
   }) {
     return TextFormField(
       controller: controller,
@@ -381,7 +404,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
           borderSide: const BorderSide(color: Color(0xFF06B6D4), width: 2),
         ),
       ),
-      validator: (value) => value == null || value.trim().isEmpty ? 'Required field' : null,
+      validator: isRequired 
+          ? (value) => value == null || value.trim().isEmpty ? 'Required field' : null
+          : null,
     );
   }
 

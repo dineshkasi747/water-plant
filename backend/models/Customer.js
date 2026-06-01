@@ -9,17 +9,20 @@ const customerSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
-    required: true,
+    required: false,
+    default: '',
     trim: true
   },
   address: {
     type: String,
-    required: true,
+    required: false,
+    default: '',
     trim: true
   },
   area: {
     type: String,
-    required: true,
+    required: false,
+    default: 'General',
     trim: true,
     index: true
   },
